@@ -85,21 +85,36 @@ public class MenuClient {
 	   }
 	   
 	public static void main(String[] args) {
-		MenuClient swingControlDemo = new MenuClient();  
-		swingControlDemo.showEventDemo();
+		
+		//MenuClient swingControlDemo = new MenuClient();  
+		//swingControlDemo.showEventDemo();
 		String eleccion="PPT";
 		//String eleccion=swingControlDemo.getEleccion();
 			   
 	   try(Socket s = new Socket("localhost",55558);
 		DataInputStream dis = new DataInputStream(s.getInputStream());
 		DataOutputStream dos = new DataOutputStream(s.getOutputStream())){
+		   dos.writeUTF(eleccion);
 		   
-		   if(eleccion=="PPT") {
+		   /*
+		   try {
+				//Thread.sleep(10000000);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}*/
+
+		   while(dis.readUTF()==null);//Espero a que el servidor me de el aviso de empezar
+		   
+		   if(eleccion.equals("PPT")) {
 			   InterfazPPT PPT = new InterfazPPT();  
 			   PPT.showEventDemo();
-			   PPT.crearHilo();
-		   		   
+			   PPT.crearHilo();		   		   
 			   dos.writeUTF(PPT.getEleccion());
+			   //resultado
+
+			   PPT.resultado(dis.readUTF());
+			   
 		   }else {
 			   
 		   }

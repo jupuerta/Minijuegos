@@ -26,7 +26,22 @@ public class InterfazPPT extends Thread{
 		public InterfazPPT(){
 	      prepareGUI();
 	   }
-				
+		
+		public void resultado(String result) {
+			try {
+				   for(int tiempo=100;tiempo>-1;tiempo--) {
+					   Thread.sleep(500);
+					   clockLabel.setText(result);
+					   
+					   Thread.sleep(500);
+					   clockLabel.setText("");
+				   }				
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		
 		public String getEleccion() {
 			return this.eleccion;
 		}
@@ -122,7 +137,7 @@ public class InterfazPPT extends Thread{
 			   e.printStackTrace();
 		   }
 	   }
-	   
+	   /*
 	   public static void main(String[] args){
 		   InterfazPPT swingControlDemo = new InterfazPPT();  
 		   swingControlDemo.showEventDemo();
@@ -148,5 +163,5 @@ public class InterfazPPT extends Thread{
 				e.printStackTrace();
 			}
 	   }
-	   
+	   */
 }
