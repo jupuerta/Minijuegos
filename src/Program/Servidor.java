@@ -19,6 +19,8 @@ public class Servidor implements Runnable{
 	private static String opcionJugador2=null;
 	private Socket cliente;
 	private static CyclicBarrier barrera = new CyclicBarrier(2);
+	private static CyclicBarrier opcionJugador = new CyclicBarrier(2);
+
 	private static int jugadoresPTT=0;
 	private static int jugadoresTER=0;
 	
@@ -41,6 +43,15 @@ public class Servidor implements Runnable{
 	
 	public synchronized void incJugadorTER() {
 		jugadoresTER++;
+	}
+	
+	public String caraCruz() {
+		double random=Math.random();
+		if(random<0.5) {
+			return "Cara";
+		}else {
+			return "Cruz";
+		}
 	}
 	
 	public boolean empatePTT(String opcion1, String opcion2) {
@@ -81,11 +92,11 @@ public class Servidor implements Runnable{
 			DataOutputStream dos = new DataOutputStream(cliente.getOutputStream());){										
 			mens=dis.readUTF();
 			
-			//Para que un cliente espere hasta que se una alguien con quien jugar
+			
 			if(mens.equals("PPT")) {
 				
 				incJugadorPTT();
-				barrera.await();//Asi conseguimos que los dos empiecen a la vez
+				barrera.await();////Para que un cliente espere hasta que se una alguien con quien jugar
 				
 				dos.writeUTF("continua");//Mensaje de que empiecen
 				
@@ -94,7 +105,8 @@ public class Servidor implements Runnable{
 				if(opcionJugador1==null) {
 					opcionJugador1=opcion;
 					
-					Thread.sleep(50);//Para que le de tiempo a que el otro hilo dé valor a opcionJugador2
+					
+					opcionJugador.await();//Asi espera a que el otro cliente de valor a opcionJugador2
 					
 					if(ganadorPTT(opcionJugador1, opcionJugador2)) {
 						dos.writeUTF("Ganador");
@@ -108,6 +120,7 @@ public class Servidor implements Runnable{
 				}else {
 					opcionJugador2=opcion;
 					
+					opcionJugador.await();//Para que el otro cliente pueda saber su resultado
 					if(ganadorPTT(opcionJugador2, opcionJugador1)) {
 						dos.writeUTF("Ganador");
 					}else {
@@ -118,6 +131,8 @@ public class Servidor implements Runnable{
 						}
 					}
 				}
+			}else {
+				dos.writeUTF(caraCruz());
 			}
 			
 		}catch (IOException | InterruptedException | BrokenBarrierException e) {

@@ -11,9 +11,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
-	import java.awt.*;
-	import java.awt.event.*;
-	import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 
 public class InterfazPPT extends Thread{
 	   private JFrame mainFrame;
@@ -24,7 +24,30 @@ public class InterfazPPT extends Thread{
 	   private String eleccion;
 		
 		public InterfazPPT(){
-	      prepareGUI();
+			mainFrame = new JFrame("Piedra-Papel-Tijera");
+			  mainFrame.setSize(400,400);
+			  mainFrame.setLayout(new GridLayout(4, 1));
+			
+			  headerLabel = new JLabel("",JLabel.CENTER );
+			  clockLabel = new JLabel("",JLabel.CENTER);
+			  statusLabel = new JLabel("",JLabel.CENTER); 
+			  clockLabel.setFont(new Font(clockLabel.getFont().getName(), Font.BOLD, 16));
+		      statusLabel.setSize(350,100);
+		      
+		      mainFrame.addWindowListener(new WindowAdapter() {
+		         public void windowClosing(WindowEvent windowEvent){
+		            System.exit(0);
+		         }        
+		      });    
+		      controlPanel = new JPanel();
+		      controlPanel.setLayout(new FlowLayout());
+		
+		      mainFrame.add(headerLabel);
+		      mainFrame.add(controlPanel);
+		      mainFrame.add(clockLabel);
+		      mainFrame.add(statusLabel);
+		      mainFrame.setVisible(true);
+		      showEventDemo();
 	   }
 		
 		public void resultado(String result) {
@@ -50,31 +73,6 @@ public class InterfazPPT extends Thread{
 			this.eleccion = eleccion;
 		}
 		
-		public void prepareGUI(){
-	      mainFrame = new JFrame("Piedra-Papel-Tijera");
-		  mainFrame.setSize(400,400);
-		  mainFrame.setLayout(new GridLayout(4, 1));
-		
-		  headerLabel = new JLabel("",JLabel.CENTER );
-		  clockLabel = new JLabel("",JLabel.CENTER);
-		  statusLabel = new JLabel("",JLabel.CENTER); 
-		  clockLabel.setFont(new Font(clockLabel.getFont().getName(), Font.BOLD, 16));
-	      statusLabel.setSize(350,100);
-	      
-	      mainFrame.addWindowListener(new WindowAdapter() {
-	         public void windowClosing(WindowEvent windowEvent){
-	            System.exit(0);
-	         }        
-	      });    
-	      controlPanel = new JPanel();
-	      controlPanel.setLayout(new FlowLayout());
-	
-	      mainFrame.add(headerLabel);
-	      mainFrame.add(controlPanel);
-	      mainFrame.add(clockLabel);
-	      mainFrame.add(statusLabel);
-	      mainFrame.setVisible(true);  
-	   }
 		public void showEventDemo(){
 	      headerLabel.setText("Elige una de las opciones"); 
 		
