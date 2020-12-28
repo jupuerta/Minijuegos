@@ -1,6 +1,7 @@
 package Program;
 
 import java.awt.FlowLayout;
+
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -18,8 +19,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import Program.MenuClient.ButtonClickListener;
 
+//Parte de la interfaz esta sacada de Internet
 public class MenuClient {
 	private JFrame mainFrame;
 	   private JLabel headerLabel;

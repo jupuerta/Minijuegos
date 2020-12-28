@@ -22,7 +22,6 @@ public class S {
 						
 						
 						
-						
 					}catch (IOException e) {
 								System.out.println(e);
 					}
