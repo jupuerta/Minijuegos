@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 //Parte de la interfaz esta sacada de Internet
 public class MenuClient {
 	private JFrame mainFrame;
+	private JLabel esperaLabel;
 	private JLabel headerLabel;
 	private JPanel controlPanel;
 	private String eleccion;
@@ -33,7 +34,7 @@ public class MenuClient {
 		mainFrame = new JFrame("Menu");
 		mainFrame.setSize(400, 200);
 		mainFrame.setLayout(new GridLayout(4, 1));
-
+		esperaLabel = new JLabel("",JLabel.CENTER);
 		headerLabel = new JLabel("", JLabel.CENTER);
 
 		mainFrame.addWindowListener(new WindowAdapter() {
@@ -46,6 +47,7 @@ public class MenuClient {
 
 		mainFrame.add(headerLabel);
 		mainFrame.add(controlPanel);
+		 mainFrame.add(esperaLabel);
 		mainFrame.setVisible(true);
 		
 		showEventDemo();
@@ -58,6 +60,7 @@ public class MenuClient {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		esperaLabel.setText("");
 	}
 
 	public String getEleccion() {
@@ -66,6 +69,14 @@ public class MenuClient {
 
 	public void setEleccion(String eleccion) {
 		this.eleccion = eleccion;
+	}
+	
+	public void setEsperaLabel(String texto) {
+		esperaLabel.setText(texto);
+	}
+	
+	public void hide() {
+		mainFrame.setVisible(false);
 	}
 
 	private void showEventDemo() {
@@ -121,8 +132,11 @@ public class MenuClient {
 			 */
 
 			if (eleccion.equals("PPT")) {
-				while (dis.readUTF() == null)
-					;// Espero a que el servidor me de el aviso de empezar
+				swingControlDemo.setEsperaLabel("Espera a que se conecte otro cliente");
+				
+				while (dis.readUTF() == null);// Espero a que el servidor me de el aviso de empezar
+				swingControlDemo.setEsperaLabel("");
+				swingControlDemo.hide();
 				
 				InterfazPPT PPT = new InterfazPPT();
 				PPT.crearHilo();
