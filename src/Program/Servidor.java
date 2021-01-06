@@ -27,8 +27,9 @@ public class Servidor implements Runnable {
 	 * Post: Incrementa la variable jugadoresPTT
 	 */
 	public synchronized void incJugadorPTT() {
-		// Lo pongo con synchronized ya que puede dar problemas de indeterminación
-		//aunque la probabilidad de que ocurra es casi nula
+//		 Lo pongo con synchronized ya que puede dar problemas de indeterminación
+//		aunque la probabilidad de que ocurra es casi nula ya que es casi imposible que 
+//		dos clientes accedan a la vez a la variable estática jugadoresPTT
 		jugadoresPTT++;
 	}
 

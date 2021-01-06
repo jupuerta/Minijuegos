@@ -1,13 +1,9 @@
 package Program;
 
 import java.awt.FlowLayout;
-
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -15,13 +11,11 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-//Parte de la interfaz esta sacada de Internet
 public class MenuClient {
 	private JFrame mainFrame;
 	private JLabel esperaLabel;
@@ -36,40 +30,11 @@ public class MenuClient {
 		mainFrame.setLayout(new GridLayout(4, 1));
 		esperaLabel = new JLabel("", JLabel.CENTER);
 		headerLabel = new JLabel("", JLabel.CENTER);
-
-		mainFrame.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent windowEvent) {
-				System.exit(0);
-			}
-		});
+		headerLabel.setText("Elige una de las opciones");
+		
 		controlPanel = new JPanel();
 		controlPanel.setLayout(new FlowLayout());
-
-		mainFrame.add(headerLabel);
-		mainFrame.add(controlPanel);
-		mainFrame.add(esperaLabel);
-		mainFrame.setVisible(true);
-
-		showEventDemo();
-		try {
-			barrera.await();//El programa se para hasta que el cliente elija a lo que quiere jugar
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (BrokenBarrierException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		esperaLabel.setText("");
-	}
-	
-	/*
-	 * Pre: 
-	 * Post: crea los botones con y da texto a los label
-	 */
-	private void showEventDemo() {
-		headerLabel.setText("Elige una de las opciones");
-
+		
 		JButton piedraButton = new JButton("Piedra, papel o tijera");
 		JButton papelButton = new JButton("Cara o Cruz");
 
@@ -82,12 +47,26 @@ public class MenuClient {
 		controlPanel.add(piedraButton);
 		controlPanel.add(papelButton);
 
+		mainFrame.add(headerLabel);
+		mainFrame.add(controlPanel);
+		mainFrame.add(esperaLabel);
 		mainFrame.setVisible(true);
+
+		try {
+			barrera.await();//El programa se para hasta que el cliente elija a lo que quiere jugar
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BrokenBarrierException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		esperaLabel.setText("");
 	}
 
 	/*ELECCIÓN DE LA OPCIÓN
 	 * Pre: 
-	 * Post: Devuelve la eleccion del cliente ya sea "Cara o Cruz" o "Piedra, Papel o Tijera" 
+	 * Post: Devuelve la elección del cliente ya sea "Cara o Cruz" o "Piedra, Papel o Tijera" 
 	 */
 	public String getEleccion() {
 		return this.eleccion;
@@ -144,8 +123,8 @@ public class MenuClient {
 
 			if (eleccion.equals("PPT")) {
 				swingControlDemo.setEsperaLabel("Espera a que se conecte otro cliente");
-
-				while (dis.readUTF() == null);// Espero a que el servidor me de el aviso de empezar
+				
+				while (dis.readUTF() == null);// Espero a que el servidor me dé el aviso de empezar
 				swingControlDemo.setEsperaLabel("");
 				swingControlDemo.hide();
 
