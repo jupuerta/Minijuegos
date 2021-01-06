@@ -28,13 +28,13 @@ public class MenuClient {
 	private JLabel headerLabel;
 	private JPanel controlPanel;
 	private String eleccion;
-	private static CyclicBarrier barrera = new CyclicBarrier(2);
+	private static CyclicBarrier barrera = new CyclicBarrier(2);//El objetivo de esta barrera es que el programa principal no continue hasta que el cliente pulse un botón
 
 	public MenuClient() {
 		mainFrame = new JFrame("Menu");
 		mainFrame.setSize(400, 200);
 		mainFrame.setLayout(new GridLayout(4, 1));
-		esperaLabel = new JLabel("",JLabel.CENTER);
+		esperaLabel = new JLabel("", JLabel.CENTER);
 		headerLabel = new JLabel("", JLabel.CENTER);
 
 		mainFrame.addWindowListener(new WindowAdapter() {
@@ -47,12 +47,12 @@ public class MenuClient {
 
 		mainFrame.add(headerLabel);
 		mainFrame.add(controlPanel);
-		 mainFrame.add(esperaLabel);
+		mainFrame.add(esperaLabel);
 		mainFrame.setVisible(true);
-		
+
 		showEventDemo();
 		try {
-			barrera.await();
+			barrera.await();//El programa se para hasta que el cliente elija a lo que quiere jugar
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -62,31 +62,19 @@ public class MenuClient {
 		}
 		esperaLabel.setText("");
 	}
-
-	public String getEleccion() {
-		return this.eleccion;
-	}
-
-	public void setEleccion(String eleccion) {
-		this.eleccion = eleccion;
-	}
 	
-	public void setEsperaLabel(String texto) {
-		esperaLabel.setText(texto);
-	}
-	
-	public void hide() {
-		mainFrame.setVisible(false);
-	}
-
+	/*
+	 * Pre: 
+	 * Post: crea los botones con y da texto a los label
+	 */
 	private void showEventDemo() {
 		headerLabel.setText("Elige una de las opciones");
 
 		JButton piedraButton = new JButton("Piedra, papel o tijera");
-		JButton papelButton = new JButton("Tres en raya");
+		JButton papelButton = new JButton("Cara o Cruz");
 
 		piedraButton.setActionCommand("PPT");
-		papelButton.setActionCommand("TER");
+		papelButton.setActionCommand("COZ");
 
 		piedraButton.addActionListener(new ButtonClickListener());
 		papelButton.addActionListener(new ButtonClickListener());
@@ -97,17 +85,45 @@ public class MenuClient {
 		mainFrame.setVisible(true);
 	}
 
+	/*ELECCIÓN DE LA OPCIÓN
+	 * Pre: 
+	 * Post: Devuelve la eleccion del cliente ya sea "Cara o Cruz" o "Piedra, Papel o Tijera" 
+	 */
+	public String getEleccion() {
+		return this.eleccion;
+	}
+
+	/*MOSTRAR UN TEXTO MIENTRAS SE ESPERA A QUE OTRO JUGADOR SE UNA
+	 * Pre: Recibe un String
+	 * Post: Muestra el texto el cual se le ha pasado
+	 */
+	public void setEsperaLabel(String texto) {
+		esperaLabel.setText(texto);
+	}
+
+	/*OCULTA EL FRAME PRINCIPAL CUANDO SE HA ELEGIDO A QUE JUEGO JUGAR
+	 * Pre: 
+	 * Post: oculta el Frame principal
+	 */
+	public void hide() {
+		mainFrame.setVisible(false);
+	}
+
+	/*
+	 * Pre: El método es referenciado cuando se pulsa un botón
+	 * Post: Define la elección respecto del botón pulsado
+	 */
 	public class ButtonClickListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			String command = e.getActionCommand();
 			if (command.equals("PPT")) {
 				eleccion = "PPT";
 			} else {
-				eleccion = "TER";
+				eleccion = "COZ";
 			}
-			
+
 			try {
-				barrera.await();
+				barrera.await();//Una vez que el cliente elige, el programa continua
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -123,30 +139,21 @@ public class MenuClient {
 				DataInputStream dis = new DataInputStream(s.getInputStream());
 				DataOutputStream dos = new DataOutputStream(s.getOutputStream())) {
 			MenuClient swingControlDemo = new MenuClient();
-			String eleccion=swingControlDemo.getEleccion();
+			String eleccion = swingControlDemo.getEleccion();
 			dos.writeUTF(eleccion);
-
-			/*
-			 * try { //Thread.sleep(10000000); } catch (InterruptedException e1) { // TODO
-			 * Auto-generated catch block e1.printStackTrace(); }
-			 */
 
 			if (eleccion.equals("PPT")) {
 				swingControlDemo.setEsperaLabel("Espera a que se conecte otro cliente");
-				
+
 				while (dis.readUTF() == null);// Espero a que el servidor me de el aviso de empezar
 				swingControlDemo.setEsperaLabel("");
 				swingControlDemo.hide();
-				
-				InterfazPPT PPT = new InterfazPPT();
-				PPT.crearHilo();
-				dos.writeUTF(PPT.getEleccion());
-				// resultado
 
+				InterfazPPT PPT = new InterfazPPT();
+				dos.writeUTF(PPT.getEleccion());
 				PPT.resultado(dis.readUTF());
 			} else {
-				InterfazCaraCruz CC=new InterfazCaraCruz();				
-							
+				InterfazCaraCruz CC = new InterfazCaraCruz();
 				CC.result(dis.readUTF());
 			}
 

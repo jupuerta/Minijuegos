@@ -25,7 +25,7 @@ public class InterfazCaraCruz {
 	private JLabel statusLabel;
 	private JPanel controlPanel;
 	private String eleccion;
-	private static CyclicBarrier barrera = new CyclicBarrier(2);
+	private static CyclicBarrier barrera = new CyclicBarrier(2);//El objetivo de esta barrera es que el programa principal no continue hasta que el cliente pulse un botón
 
 	public InterfazCaraCruz() {
 		mainFrame = new JFrame("Cara-O-Cruz");
@@ -62,15 +62,7 @@ public class InterfazCaraCruz {
 			e.printStackTrace();
 		}
 	}
-
-	public String getEleccion() {
-		return this.eleccion;
-	}
-
-	public void setEleccion(String eleccion) {
-		this.eleccion = eleccion;
-	}
-
+	
 	public void showEventDemo() {
 		headerLabel.setText("Dale al botón para lanzar la moneda");
 
@@ -82,11 +74,23 @@ public class InterfazCaraCruz {
 
 		mainFrame.setVisible(true);
 	}
+
+	public String getEleccion() {
+		return this.eleccion;
+	}
 	
+	/*MOSTRAR SOLUCIÓN EN UN LABEL
+	 * Pre: Recibe un String el cual es la solución
+	 * Post: Se muestra la solución en un label
+	 */
 	public void result(String res) {
 		statusLabel.setText(res);
 	}
 
+	/*
+	 * Pre: El método es referenciado cuando se pulsa un botón
+	 * Post: Define la elección respecto del botón pulsado
+	 */
 	public class ButtonClickListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			try {
@@ -100,8 +104,4 @@ public class InterfazCaraCruz {
 			}
 		}
 	}
-
-	 //public static void main(String[] args){
-		// InterfazCaraCruz swingControlDemo=new InterfazCaraCruz();
-	 //}
 }
