@@ -63,21 +63,6 @@ public class InterfazCaraCruz {
 		}
 	}
 
-	public void resultado(String result) {
-		try {
-			for (int tiempo = 100; tiempo > -1; tiempo--) {
-				Thread.sleep(500);
-				clockLabel.setText(result);
-
-				Thread.sleep(500);
-				clockLabel.setText("");
-			}
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 	public String getEleccion() {
 		return this.eleccion;
 	}
